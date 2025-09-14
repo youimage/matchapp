@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Chat with {{ other_profile.name }} - MatchApp{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md h-96">
+        <!-- Chat Header -->
+        <div class="border-b px-6 py-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold">Chat with {{ other_profile.name }}</h2>
+                <div class="space-x-2">
+                    <a href="{{ url_for('profile.view_other_profile', user_id=other_user.id) }}" class="text-blue-600 hover:text-blue-800 text-sm">
+                        👤 View Profile
+                    </a>
+                    <a href="{{ url_for('match.view_matches') }}" class="text-gray-600 hover:text-gray-800 text-sm">
+                        ← Back to Matches
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Messages Area -->
+        <div class="flex-1 px-6 py-4 h-64 overflow-y-auto" id="messages-container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-4 chat-message">
+                        {% if message.sender_id == current_user.id %}
+                            <!-- Own message - right side -->
+                            <div class="flex justify-end">
+                                <div class="bg-blue-600 text-white px-4 py-2 rounded-lg max-w-xs lg:max-w-md">
+                                    <p>{{ message.content }}</p>
+                                    <p class="text-xs text-blue-100 mt-1">{{ message.created_at|timeago }}</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <!-- Other user's message - left side -->
+                            <div class="flex justify-start">
+                                <div class="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg max-w-xs lg:max-w-md">
+                                    <p>{{ message.content }}</p>
+                                    <p class="text-xs text-gray-500 mt-1">{{ message.created_at|timeago }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center text-gray-500 py-8">
+                    <p>No messages yet. Start the conversation!</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Message Input -->
+        <div class="border-t px-6 py-4">
+            <form method="POST" action="{{ url_for('chat.send_message', match_id=match.id) }}" id="chat-form">
+                {{ form.hidden_tag() }}
+                <div class="flex space-x-2">
+                    {{ form.content(class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", placeholder="Type your message...") }}
+                    {{ form.submit(class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                </div>
+                {% for error in form.content.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-scroll to bottom of messages
+document.addEventListener('DOMContentLoaded', function() {
+    const messagesContainer = document.getElementById('messages-container');
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Clear form after message
+    const form = document.getElementById('chat-form');
+    form.addEventListener('submit', function() {
+        setTimeout(() => {
+            const textarea = form.querySelector('textarea');
+            if (textarea) textarea.value = '';
+        }, 100);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Generic Matching App{% endblock %}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('index') }}" class="text-xl font-bold text-gray-900">
+                        💕 MatchApp
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('match.discover') }}" class="text-gray-700 hover:text-gray-900">Discover</a>
+                        <a href="{{ url_for('match.view_matches') }}" class="text-gray-700 hover:text-gray-900">Matches</a>
+                        <a href="{{ url_for('profile.view_profile') }}" class="text-gray-700 hover:text-gray-900">Profile</a>
+                        <a href="{{ url_for('auth.logout') }}" class="bg-red-600 text-white px-3 py-2 rounded-md text-sm hover:bg-red-700">
+                            Logout
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="text-gray-700 hover:text-gray-900">Login</a>
+                        <a href="{{ url_for('auth.register') }}" class="bg-blue-600 text-white px-3 py-2 rounded-md text-sm hover:bg-blue-700">
+                            Sign Up
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mb-6">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} p-4 mb-4 rounded-md 
+                                   {% if category == 'success' %}bg-green-100 text-green-800 border-green-300
+                                   {% elif category == 'danger' %}bg-red-100 text-red-800 border-red-300
+                                   {% elif category == 'warning' %}bg-yellow-100 text-yellow-800 border-yellow-300
+                                   {% else %}bg-blue-100 text-blue-800 border-blue-300{% endif %}
+                                   border">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

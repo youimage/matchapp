@@ -1,0 +1,56 @@
+You are an expert Python Flask developer.  
+Follow the instructions below to create a **generic matching app skeleton**. It does not need to be a complete app; focus on building the "core functionality" suitable for learning and future extensions.
+
+【Purpose】
+- Should be reusable for any matching app, not dependent on Tinder-style or Pairs-style UI
+- Minimal functionality should be runnable; frontend can be extended freely
+- Must be immediately runnable on Replit
+
+【Tech Stack】
+- Flask + Flask-Login + Flask-SQLAlchemy + Flask-WTF
+- SQLite (small-scale database)
+- TailwindCSS via CDN
+- Image upload is optional
+- Minimal frontend is sufficient (can be extended later)
+
+【Required Features】
+1. Authentication: /register, /login, /logout
+   - Passwords must be hashed
+2. Profile Management: /profile, /profile/edit
+   - Name, age, gender, bio, tags, etc.
+3. Matching: likes table, matches table
+   - Mutual likes result in a match
+4. Chat: /chat/<match_id>
+   - Send and display messages (real-time not required)
+5. API & Routing: design REST-style endpoints; frontend can be extended freely
+6. Database Models: users, profiles, likes, matches, messages
+
+【Folder Structure】
+/project-root
+  - app.py
+  - models.py
+  - forms.py
+  - routes/
+      auth.py, profile.py, match.py, chat.py
+  - templates/ (base.html, index.html, register.html, login.html, profile.html, matches.html, chat.html)
+  - static/ (css/style.css, js/main.js)
+  - requirements.txt
+  - README.md
+
+【Output Instructions】
+1. First, show the folder structure tree
+2. Then generate each file’s content in code blocks
+3. Include a README.md with startup instructions and minimum testing steps
+4. Add comments in all main files explaining the purpose and future extension points
+
+【Notes】
+- UI should be simple; swipe functionality or other specific UI elements are NOT required
+- Generated files must be immediately runnable on Replit
+- Prioritize extensibility
+- app.py should automatically run `db.create_all()` on startup
+- SECRET_KEY must be obtained from environment variables (use Replit Secrets recommended)
+
+【Optional Additions】
+- seeds.py: script to generate dummy users for testing
+- .env.example: example SECRET_KEY
+- simple unit tests (e.g., match logic in models)

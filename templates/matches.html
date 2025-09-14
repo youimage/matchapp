@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}My Matches - MatchApp{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-8">My Matches</h2>
+    
+    {% if matches %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for match_info in matches %}
+                <div class="bg-white rounded-lg shadow-md p-6 match-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-semibold">{{ match_info.other_profile.name }}</h3>
+                        <span class="text-sm text-gray-500">{{ match_info.match.created_at|timeago }}</span>
+                    </div>
+                    
+                    {% if match_info.other_profile.age %}
+                        <p class="text-gray-600 mb-2">Age: {{ match_info.other_profile.age }}</p>
+                    {% endif %}
+                    
+                    {% if match_info.other_profile.location %}
+                        <p class="text-gray-600 mb-2">📍 {{ match_info.other_profile.location }}</p>
+                    {% endif %}
+                    
+                    {% if match_info.latest_message %}
+                        <div class="bg-gray-50 p-3 rounded-md mb-4">
+                            <p class="text-sm text-gray-700">{{ match_info.latest_message.content[:50] }}{% if match_info.latest_message.content|length > 50 %}...{% endif %}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ match_info.latest_message.created_at|timeago }}</p>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="flex space-x-2">
+                        <a href="{{ url_for('chat.chat', match_id=match_info.match.id) }}" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors text-center">
+                            💬 Chat
+                            {% if match_info.unread_count > 0 %}
+                                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full ml-1">{{ match_info.unread_count }}</span>
+                            {% endif %}
+                        </a>
+                        <a href="{{ url_for('profile.view_other_profile', user_id=match_info.other_user.id) }}" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition-colors text-center">
+                            👤 Profile
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center bg-white p-8 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">No matches yet</h3>
+            <p class="text-gray-600 mb-4">Start liking profiles to find your matches!</p>
+            <a href="{{ url_for('match.discover') }}" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                Discover People
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
