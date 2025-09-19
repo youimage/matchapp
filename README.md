@@ -167,11 +167,11 @@ This skeleton is designed for easy extension:
 
 ## Security Features
 
-- ✅ Password hashing with Werkzeug
-- ✅ CSRF protection on all forms
-- ✅ SQL injection protection via SQLAlchemy ORM
-- ✅ Session management with Flask-Login
-- ✅ Environment-based secret management
+- ☑ Password hashing with Werkzeug
+- ☑ CSRF protection on all forms
+- ☑ SQL injection protection via SQLAlchemy ORM
+- ☑ Session management with Flask-Login
+- ☑ Environment-based secret management
 
 ## Development Notes
 
