@@ -4,7 +4,7 @@ A Flask-based matching application providing core functionality for user authent
 
 ## Features
 
-### Core Functionality ✅
+### Core Functionality ☑
 - **Authentication System**: User registration, login, logout with secure password hashing
 - **Profile Management**: Editable user profiles with name, age, gender, bio, tags, location  
 - **Matching Logic**: Like/dislike system with mutual matching detection
